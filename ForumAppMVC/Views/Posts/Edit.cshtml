@@ -1,44 +1,62 @@
 ﻿@model MVCForumApp.Models.Post
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Edit post";
+    var currentUserId = HttpContextAccessor.HttpContext?.Session.GetInt32("UserId");
 }
 
-<h1>Edit</h1>
-
-<h4>Post</h4>
+<h1>Make topic</h1>
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="TopicId" class="control-label"></label>
-                <select asp-for="TopicId" class="form-control" asp-items="ViewBag.TopicId"></select>
-                <span asp-validation-for="TopicId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UserId" class="control-label"></label>
-                <select asp-for="UserId" class="form-control" asp-items="ViewBag.UserId"></select>
-                <span asp-validation-for="UserId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CreatedAt" class="control-label"></label>
-                <input asp-for="CreatedAt" class="form-control" />
-                <span asp-validation-for="CreatedAt" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
 
+@if (currentUserId != null && currentUserId == Model.UserId)
+{
+
+    <div class="row">
+        <div class="col-md-4">
+
+
+            <form asp-action="Edit">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+
+                <div class="form-group">
+                    <label asp-for="Content" class="control-label"></label>
+                    <textarea asp-for="Content" class="form-control" rows="5"></textarea>
+                    <span asp-validation-for="Content" class="text-danger"></span>
+                </div>
+
+
+                <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="TopicId" />
+
+
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Edit post</button>
+                    <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-secondary">Cancel</a>
+                </div>
+            </form>
+
+
+        </div>
+    </div>
+}
+else
+{
+    <div class="alert alert-warning">
+        <h1>You can't edit post without logging in or the post that you haven't created</h1>
+        <a asp-controller="Account" asp-action="Login" class="btn btn-outline-primary">Log in</a>
+    </div>
+}
+}
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-controller="Topics" asp-action="Details" asp-route-id="@Model.Id" class="btn btn-secondary">Back to the topic</a>
+
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

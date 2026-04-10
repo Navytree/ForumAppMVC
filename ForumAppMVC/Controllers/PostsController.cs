@@ -58,8 +58,16 @@ namespace MVCForumApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Content,TopicId,UserId")] Post post)
+        public async Task<IActionResult> Create([Bind("Content,TopicId")] Post post)
         {
+
+            var userId = HttpContext.Session.GetInt32("UserId");
+            if (userId == null) return RedirectToAction("Login", "Account");
+
+            post.UserId = userId.Value;
+            post.CreatedAt = DateTime.Now;
+
+
             if (ModelState.IsValid)
             {
                 _context.Add(post);
@@ -83,8 +91,6 @@ namespace MVCForumApp.Controllers
             {
                 return NotFound();
             }
-            ViewData["TopicId"] = new SelectList(_context.Topic, "Id", "Id", post.TopicId);
-            ViewData["UserId"] = new SelectList(_context.User, "Id", "Login", post.UserId);
             return View(post);
         }
 
@@ -93,17 +99,27 @@ namespace MVCForumApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id")] Post post)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Content,TopicId")] Post post)
         {
             if (id != post.Id)
             {
                 return NotFound();
             }
 
+            var userId = HttpContext.Session.GetInt32("UserId");
+            if (userId == null) return RedirectToAction("Login", "Account");
+
             if (ModelState.IsValid)
             {
                 try
                 {
+                    var originalPost = await _context.Post.AsNoTracking().FirstOrDefaultAsync(p => p.Id == id);
+                    if (originalPost == null) return NotFound();
+
+                    post.UserId = originalPost.UserId;
+                    post.CreatedAt = originalPost.CreatedAt;
+                    post.TopicId = originalPost.TopicId;
+
                     _context.Update(post);
                     await _context.SaveChangesAsync();
                 }
@@ -118,10 +134,8 @@ namespace MVCForumApp.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Details", "Topics", new { id = post.TopicId });
             }
-            ViewData["TopicId"] = new SelectList(_context.Topic, "Id", "Id", post.TopicId);
-            ViewData["UserId"] = new SelectList(_context.User, "Id", "Login", post.UserId);
             return View(post);
         }
 

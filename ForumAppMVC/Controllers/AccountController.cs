@@ -22,9 +22,15 @@ namespace MVCForumApp.Controllers
         }
 
 
+        public IActionResult Register()
+        {
+            return View();
+        }
+
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register(User account)
+        public async Task<IActionResult> Register([Bind("Login,Password")] User account)
         {
             bool Accountexists = await _context.User.AnyAsync(a => a.Login == account.Login);
 
@@ -46,21 +52,25 @@ namespace MVCForumApp.Controllers
         
         }
 
+        public IActionResult Login() => View();
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(User loginData)
+        public async Task<IActionResult> Login(string login, string password)
         {
-            bool Accountexists = await _context.User.AnyAsync(l => l.Login == loginData.Login &&
-                l.Password == loginData.Password);
+            bool Accountexists = await _context.User.AnyAsync(l => l.Login == login &&
+                l.Password == password);
 
             if (!Accountexists) {
                 ModelState.AddModelError("","Login lub hasło nie są poprawne.");    }
 
             if (ModelState.IsValid) {
+                var user = await _context.User.FirstOrDefaultAsync(u => u.Login == login);
+                HttpContext.Session.SetInt32("UserId", user.Id);
+                HttpContext.Session.SetString("UserLogin", user.Login);
                 return RedirectToAction("Index", "Topics"); }
 
-            return View(loginData);
+            return View();
 
         }
 

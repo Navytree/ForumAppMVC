@@ -49,7 +49,6 @@ namespace MVCForumApp.Controllers
         // GET: Topics/Create
         public IActionResult Create()
         {
-            ViewData["OwnerId"] = new SelectList(_context.User, "Id", "Login");
             return View();
         }
 
@@ -58,15 +57,19 @@ namespace MVCForumApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Description,OwnerId")] Topic topic)
+        public async Task<IActionResult> Create([Bind("Id,Title,Description")] Topic topic)
         {
+            var userId = HttpContext.Session.GetInt32("UserId");
+            if (userId == null) return RedirectToAction("Login", "Account");
+            topic.OwnerId = userId.Value;
+            topic.CreatedAt = DateTime.Now;
+
             if (ModelState.IsValid)
             {
                 _context.Add(topic);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["OwnerId"] = new SelectList(_context.User, "Id", "Login", topic.OwnerId);
             return View(topic);
         }
 
@@ -83,7 +86,6 @@ namespace MVCForumApp.Controllers
             {
                 return NotFound();
             }
-            ViewData["OwnerId"] = new SelectList(_context.User, "Id", "Login", topic.OwnerId);
             return View(topic);
         }
 
@@ -94,15 +96,24 @@ namespace MVCForumApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description")] Topic topic)
         {
-            if (id != topic.Id)
-            {
-                return NotFound();
-            }
+
+            if (id != topic.Id) return NotFound();
+
+            var userId = HttpContext.Session.GetInt32("UserId");
+            if (userId == null) return RedirectToAction("Login", "Account");
+
+
 
             if (ModelState.IsValid)
             {
                 try
                 {
+                    var originalTopic = await _context.Topic.AsNoTracking().FirstOrDefaultAsync(t => t.Id == id);
+
+                    if (originalTopic == null) return NotFound();
+                    topic.OwnerId = originalTopic.OwnerId;
+                    topic.CreatedAt = originalTopic.CreatedAt;
+
                     _context.Update(topic);
                     await _context.SaveChangesAsync();
                 }
@@ -119,7 +130,6 @@ namespace MVCForumApp.Controllers
                 }
                 return RedirectToAction("Details", new { id = topic.Id });
             }
-            ViewData["OwnerId"] = new SelectList(_context.User, "Id", "Login", topic.OwnerId);
             return View(topic);
         }
 
@@ -142,6 +152,7 @@ namespace MVCForumApp.Controllers
 
             return View(topic);
         }
+
 
         // POST: Topics/Delete/5
         [HttpPost, ActionName("Delete")]
