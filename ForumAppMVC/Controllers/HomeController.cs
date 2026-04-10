@@ -1,8 +1,8 @@
 using System.Diagnostics;
-using ForumAppMVC.Models;
+using MVCForumApp.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ForumAppMVC.Controllers
+namespace MVCForumApp.Controllers
 {
     public class HomeController : Controller
     {
