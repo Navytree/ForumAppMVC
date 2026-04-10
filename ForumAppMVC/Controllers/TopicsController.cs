@@ -36,6 +36,7 @@ namespace MVCForumApp.Controllers
 
             var topic = await _context.Topic
                 .Include(t => t.User)
+                .Include(t => t.Posts)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (topic == null)
             {
@@ -57,7 +58,7 @@ namespace MVCForumApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Description,CreatedAt,OwnerId")] Topic topic)
+        public async Task<IActionResult> Create([Bind("Id,Title,Description,OwnerId")] Topic topic)
         {
             if (ModelState.IsValid)
             {
@@ -91,7 +92,7 @@ namespace MVCForumApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,CreatedAt,OwnerId")] Topic topic)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description")] Topic topic)
         {
             if (id != topic.Id)
             {
@@ -116,7 +117,7 @@ namespace MVCForumApp.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Details", new { id = topic.Id });
             }
             ViewData["OwnerId"] = new SelectList(_context.User, "Id", "Login", topic.OwnerId);
             return View(topic);
@@ -132,6 +133,7 @@ namespace MVCForumApp.Controllers
 
             var topic = await _context.Topic
                 .Include(t => t.User)
+                .Include(t => t.Posts)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (topic == null)
             {
@@ -155,6 +157,7 @@ namespace MVCForumApp.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+
 
         private bool TopicExists(int id)
         {

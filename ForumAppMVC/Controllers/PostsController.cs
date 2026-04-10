@@ -46,12 +46,11 @@ namespace MVCForumApp.Controllers
             return View(post);
         }
 
-        // GET: Posts/Create
-        public IActionResult Create()
+        // GET: Posts/Create?topicId
+        public IActionResult Create(int topicId)
         {
-            ViewData["TopicId"] = new SelectList(_context.Topic, "Id", "Id");
-            ViewData["UserId"] = new SelectList(_context.User, "Id", "Login");
-            return View();
+            var model = new Post { TopicId = topicId };
+            return View(model);
         }
 
         // POST: Posts/Create
@@ -59,16 +58,15 @@ namespace MVCForumApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,TopicId,UserId,CreatedAt")] Post post)
+        public async Task<IActionResult> Create([Bind("Content,TopicId,UserId")] Post post)
         {
             if (ModelState.IsValid)
             {
                 _context.Add(post);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Details", "Topics", new { id = post.TopicId });
             }
-            ViewData["TopicId"] = new SelectList(_context.Topic, "Id", "Id", post.TopicId);
-            ViewData["UserId"] = new SelectList(_context.User, "Id", "Login", post.UserId);
+
             return View(post);
         }
 
@@ -95,7 +93,7 @@ namespace MVCForumApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,TopicId,UserId,CreatedAt")] Post post)
+        public async Task<IActionResult> Edit(int id, [Bind("Id")] Post post)
         {
             if (id != post.Id)
             {
