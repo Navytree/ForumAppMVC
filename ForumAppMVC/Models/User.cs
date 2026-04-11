@@ -6,6 +6,7 @@ namespace MVCForumApp.Models
     {
         public int Id { get; set; }
 
+        [Display(Name = "Author")]
         [StringLength(20, MinimumLength = 5)]
         [Required]
         public string Login { get; set; }

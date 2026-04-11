@@ -12,12 +12,12 @@ namespace MVCForumApp.Models
         public int TopicId { get; set; }
         [ForeignKey("TopicId")] 
         public virtual Topic? Topic { get; set; }
-
         public int UserId { get; set; }
         [ForeignKey("UserId")]
         public virtual User? User { get; set; }
 
 
+        [Display(Name = "Created at")]
         [DataType(DataType.Date)]
         public DateTime CreatedAt { get; set; } = DateTime.Now;
 

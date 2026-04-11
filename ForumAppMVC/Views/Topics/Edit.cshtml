@@ -7,7 +7,7 @@
     var currentUserId = HttpContextAccessor.HttpContext?.Session.GetInt32("UserId");
 }
 
-<h1>Make topic</h1>
+<h1>Edit topic</h1>
 <hr />
 
 @if (currentUserId != null && currentUserId == Model.OwnerId)

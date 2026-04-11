@@ -9,7 +9,7 @@
 <p class="text-muted">Author: @Model.User?.Login | Date: @Model.CreatedAt</p>
 <p class="lead">@Model.Title</p>
 <p class="lead">@Model.Description</p>
-<h3>Replies (@Model.Posts?.Count ?? 0)</h3>
+<h3>Replies (@Model.Posts?.Count)</h3>
 
 <hr />
 <h1>Topic's posts</h1>
@@ -39,7 +39,6 @@
                     {
                         <a asp-controller="Posts" asp-action="Edit" asp-route-id="@post.Id">Edit post</a>
                         <a asp-controller="Posts" asp-action="Delete" asp-route-id="@post.Id">Delete post</a>
-
                     }
                 </div>
             </div>

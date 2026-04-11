@@ -7,7 +7,7 @@
     var currentUserId = HttpContextAccessor.HttpContext?.Session.GetInt32("UserId");
 }
 
-<h1>Make topic</h1>
+<h1>Edit post</h1>
 <hr />
 
 @if (currentUserId != null && currentUserId == Model.UserId)
@@ -49,11 +49,6 @@ else
         <a asp-controller="Account" asp-action="Login" class="btn btn-outline-primary">Log in</a>
     </div>
 }
-}
-<div>
-    <a asp-controller="Topics" asp-action="Details" asp-route-id="@Model.Id" class="btn btn-secondary">Back to the topic</a>
-
-</div>
 
 @section Scripts {
     @{

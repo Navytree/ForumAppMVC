@@ -6,7 +6,7 @@
     ViewData["Title"] = "Topics";
 }
 
-<h1>Index</h1>
+<h1>Topics</h1>
 
 @if (HttpContextAccessor.HttpContext?.Session.GetInt32("UserId") != null)
 {
@@ -30,7 +30,6 @@
             <th>
                 @Html.DisplayNameFor(model => model.User)
             </th>
-            <th></th>
         </tr>
     </thead>
     <tbody>

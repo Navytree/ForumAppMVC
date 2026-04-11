@@ -3,11 +3,11 @@
 @inject IHttpContextAccessor HttpContextAccessor
 
 @{
-    ViewData["Title"] = "Delete";
+    ViewData["Title"] = "Delete post";
     var currentUserId = HttpContextAccessor.HttpContext?.Session.GetInt32("UserId");
 
 }
-<h1>Delete the post</h1>
+<h1>Delete post</h1>
 
 @if (currentUserId != null && Model != null && currentUserId == Model.UserId)
 {
@@ -41,7 +41,6 @@ else
         <p>ou can't delete a post unless you are logged in as it's creator</p>
         <a asp-controller="Account" asp-action="Login" class="btn btn-outline-primary">Log in</a>
     </div>
-
 }
 
 
