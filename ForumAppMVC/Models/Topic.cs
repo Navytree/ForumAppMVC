@@ -13,10 +13,10 @@ namespace MVCForumApp.Models
         [DataType(DataType.Date)]
         public DateTime CreatedAt { get; set; } = DateTime.Now;
 
-        [Display(Name = "Author")]
-
         public int OwnerId { get; set; }
         [ForeignKey("OwnerId")]
+
+        [Display(Name = "Author")]
         public virtual User? User { get; set; }
 
         public virtual ICollection<Post>? Posts { get; set; }
