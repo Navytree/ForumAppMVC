@@ -171,7 +171,7 @@ namespace MVCForumApp.Controllers
             }
 
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Details", "Topics", new { id = post.TopicId });
         }
 
         private bool PostExists(int id)

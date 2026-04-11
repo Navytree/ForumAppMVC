@@ -2,8 +2,10 @@
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
 using MVCForumApp.Data;
 using MVCForumApp.Models;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace MVCForumApp.Controllers
 {
@@ -36,7 +38,7 @@ namespace MVCForumApp.Controllers
 
             if (Accountexists)
             {
-                ModelState.AddModelError("Login", "Nazwa użytkownika jest już zajęta.");
+                ModelState.AddModelError("Login", "User name was already taken");
             }
 
 
@@ -44,11 +46,12 @@ namespace MVCForumApp.Controllers
             {
                 _context.Add(account);
                 await _context.SaveChangesAsync();
-
+                HttpContext.Session.SetInt32("UserId", account.Id);
+                HttpContext.Session.SetString("UserLogin", account.Login);
                 return RedirectToAction("Index", "Topics");
             }
 
-                return View(account);
+            return View(account);
         
         }
 
@@ -62,7 +65,7 @@ namespace MVCForumApp.Controllers
                 l.Password == password);
 
             if (!Accountexists) {
-                ModelState.AddModelError("","Login lub hasło nie są poprawne.");    }
+                ModelState.AddModelError("","Username or password are not correct");    }
 
             if (ModelState.IsValid) {
                 var user = await _context.User.FirstOrDefaultAsync(u => u.Login == login);
@@ -75,6 +78,11 @@ namespace MVCForumApp.Controllers
         }
 
 
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Clear();
+            return RedirectToAction("Login", "Account");
+        }
 
 
 

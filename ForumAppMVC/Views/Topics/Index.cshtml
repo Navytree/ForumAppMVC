@@ -14,11 +14,6 @@
         <a asp-action="Create">Add new topic</a>
     </p>
 }
-else
-{
-    <a class="nav-link text-dark" asp-controller="Account" asp-action="Login">Zaloguj</a>
-}
-
 
 <table class="table">
     <thead>
@@ -51,7 +46,7 @@ else
                 @Html.DisplayFor(modelItem => item.CreatedAt)
             </td>
             <td>
-                item.User?.Login
+                @Html.DisplayFor(modelItem => item.User.Login)
             </td>
             <td>
                 @{var currentUserId = HttpContextAccessor.HttpContext?.Session.GetInt32("UserId");}
@@ -66,7 +61,7 @@ else
                 }
                 else {
                     <td>
-                        <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                        <a asp-action="Details" asp-route-id="@item.Id">Details</a>
                     </td>
                 }
 

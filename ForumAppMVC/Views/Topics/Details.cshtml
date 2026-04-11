@@ -6,7 +6,7 @@
     ViewData["Title"] = "Topic's posts";
 }
 
-<p class="text-muted">Author: @Model.User.Login | Date: @Model.CreatedAt</p>
+<p class="text-muted">Author: @Model.User?.Login | Date: @Model.CreatedAt</p>
 <p class="lead">@Model.Title</p>
 <p class="lead">@Model.Description</p>
 <h3>Replies (@Model.Posts?.Count ?? 0)</h3>
@@ -27,35 +27,46 @@
             <div class="card mb-3 shadow-sm">
 
                 <div class="card-footer text-muted d-flex justify-content-between">
-                    <span>Author: @(post.User.Login)</span>
+                    <span>Author: @(post.User?.Login ?? "Unknown User")</span>
                     <span>Date: @post.CreatedAt.ToString("g")</span>
                 </div>
 
                 <div class="card-body">
                     <p class="card-text">@post.Content</p>
                 </div>
+                <div>
+                    @if (currentUserId != null && currentUserId == post.UserId)
+                    {
+                        <a asp-controller="Posts" asp-action="Edit" asp-route-id="@post.Id">Edit post</a>
+                        <a asp-controller="Posts" asp-action="Delete" asp-route-id="@post.Id">Delete post</a>
 
+                    }
+                </div>
             </div>
 
         }
 
-        @if (currentUserId != null)
-        {
-            <div class="mb-4">
-                <a asp-controller="Posts"
-                   asp-action="Create"
-                   asp-route-topicId="@Model.Id"
-                   class="btn btn-success">
-                    Odpowiedz w tym temacie
-                </a>
-            </div>
-        }
+    }
+    else if (currentUserId != null)
+    {
+        <div class="alert alert-info">There are no replies, make the first post :D</div>
 
     }
     else
     {
-        <div class="alert alert-info">There are no replies, make the first post :D</div>
+        <div class="alert alert-info">There are no replies :c</div>
     }
+
+
+    @if (currentUserId != null)
+    {
+        <div class="mb-4">
+            <a asp-controller="Posts" asp-action="Create" asp-route-topicId="@Model.Id" class="btn btn-success">
+                Add a reply
+            </a>
+        </div>
+    }
+
 
 
     <div>

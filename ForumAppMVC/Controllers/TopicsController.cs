@@ -36,7 +36,8 @@ namespace MVCForumApp.Controllers
 
             var topic = await _context.Topic
                 .Include(t => t.User)
-                .Include(t => t.Posts)
+                .Include(t => t.Posts!)
+                .ThenInclude(p => p.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (topic == null)
             {

@@ -14,7 +14,6 @@ namespace MVCForumApp.Models
         [Required]
         public string Password { get; set; }
 
-        public ICollection<Topic> Topics { get; set; }
-
+        public ICollection<Topic> Topics { get; set; } = new List<Topic>();
     }
 }
