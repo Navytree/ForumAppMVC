@@ -67,12 +67,17 @@ namespace MVCForumApp.Controllers
             post.UserId = userId.Value;
             post.CreatedAt = DateTime.Now;
 
-
             if (ModelState.IsValid)
             {
-                _context.Add(post);
-                await _context.SaveChangesAsync();
-                return RedirectToAction("Details", "Topics", new { id = post.TopicId });
+                var topic = await _context.Topic.FindAsync(post.TopicId);
+                if (topic != null)
+                {
+                    _context.Add(post);
+                    topic.IncrementReplies();
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction("Details", "Topics", new { id = post.TopicId });
+                }
+
             }
 
             return View(post);

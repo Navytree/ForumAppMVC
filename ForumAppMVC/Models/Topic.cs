@@ -19,7 +19,12 @@ namespace MVCForumApp.Models
         [Display(Name = "Author")]
         public virtual User? User { get; set; }
 
-        public virtual ICollection<Post>? Posts { get; set; }
+        public virtual ICollection<Post> Posts { get; set; } = new List<Post>();
+        public int RepliesCount { get; set; }
+        public void IncrementReplies()
+        {
+            RepliesCount++;
+        }
 
     }
 
