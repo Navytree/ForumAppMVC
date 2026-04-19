@@ -1,36 +1,39 @@
 ﻿@model MVCForumApp.Models.User
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Registration";
 }
 
-<h1>Create</h1>
-
-<h4>User</h4>
+<h1>Registration</h1>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+
+        <form asp-action="Register">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
+
+            <div class="form-group mb-3">
                 <label asp-for="Login" class="control-label"></label>
-                <input asp-for="Login" class="form-control" />
+                <input asp-for="Login" class="form-control" placeholder="Choose your login" />
                 <span asp-validation-for="Login" class="text-danger"></span>
             </div>
-            <div class="form-group">
+
+            <div class="form-group mb-3">
                 <label asp-for="Password" class="control-label"></label>
-                <input asp-for="Password" class="form-control" />
+                <input asp-for="Password" class="form-control" type="password" placeholder="Choose your password" />
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+
+            <div class="form-group mb-3">
+                <input type="submit" value="Register" class="btn btn-primary" />
             </div>
         </form>
+
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Login">Go back to login</a>
 </div>
 
 @section Scripts {

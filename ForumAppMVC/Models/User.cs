@@ -6,6 +6,7 @@ namespace MVCForumApp.Models
     {
         public int Id { get; set; }
 
+        [Display(Name = "Author")]
         [StringLength(20, MinimumLength = 5)]
         [Required]
         public string Login { get; set; }
@@ -14,7 +15,6 @@ namespace MVCForumApp.Models
         [Required]
         public string Password { get; set; }
 
-        public ICollection<Topic> Topics { get; set; }
-
+        public ICollection<Topic> Topics { get; set; } = new List<Topic>();
     }
 }

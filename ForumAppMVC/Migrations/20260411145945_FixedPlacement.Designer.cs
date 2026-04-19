@@ -4,6 +4,7 @@ using MVCForumApp.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MVCForumApp.Migrations
 {
     [DbContext(typeof(MVCForumAppContext))]
-    partial class MVCForumAppContextModelSnapshot : ModelSnapshot
+    [Migration("20260411145945_FixedPlacement")]
+    partial class FixedPlacement
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -68,9 +71,6 @@ namespace MVCForumApp.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("OwnerId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("RepliesCount")
                         .HasColumnType("int");
 
                     b.Property<string>("Title")
