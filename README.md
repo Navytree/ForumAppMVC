@@ -37,8 +37,9 @@ Open appsettings.json and update the DefaultConnection string to point to your l
 Run the following command in the Package Manager Console (Visual Studio) or Terminal to create the database:
    ```bash
     dotnet ef database update
+   
 4. **Run the application:**
   Press F5 in Visual Studio 2022 or use the command:
-  ```bash
-  dotnet run
+     ```bash
+     dotnet run
 
