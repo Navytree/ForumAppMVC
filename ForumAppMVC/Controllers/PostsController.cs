@@ -182,12 +182,6 @@ namespace MVCForumApp.Controllers
                 topic.RepliesCount--;
             }
 
-            //var post = await _context.Post.FindAsync(id);
-            //if (post != null)
-            //{
-            //    _context.Post.Remove(post);
-            //}
-
             await _context.SaveChangesAsync();
             return RedirectToAction("Details", "Topics", new { id = post.TopicId });
         }
