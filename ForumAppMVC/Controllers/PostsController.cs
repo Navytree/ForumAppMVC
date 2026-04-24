@@ -170,10 +170,23 @@ namespace MVCForumApp.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var post = await _context.Post.FindAsync(id);
-            if (post != null)
+            if (post == null)
             {
-                _context.Post.Remove(post);
+                return NotFound();
             }
+            _context.Post.Remove(post);
+
+            var topic = await _context.Topic.FindAsync(post.TopicId);
+            if (topic != null && topic.RepliesCount > 0)
+            {
+                topic.RepliesCount--;
+            }
+
+            //var post = await _context.Post.FindAsync(id);
+            //if (post != null)
+            //{
+            //    _context.Post.Remove(post);
+            //}
 
             await _context.SaveChangesAsync();
             return RedirectToAction("Details", "Topics", new { id = post.TopicId });
